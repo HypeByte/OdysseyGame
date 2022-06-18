@@ -14,6 +14,8 @@ rungame = True
 #Initialize player
 player = pygame.image.load("./images/spaceship.png")
 player = pygame.transform.scale(player, (100, 100))
+playerX = 450
+playerY = 600
 def spawnPlayer(x,y):
     game.blit(player, (x,y) )
 
@@ -24,5 +26,5 @@ while rungame:
         if event.type == pygame.QUIT:
             rungame = False 
 
-    spawnPlayer(450, 600)
+    spawnPlayer(playerX, playerY)
     pygame.display.update()
