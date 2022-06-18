@@ -11,11 +11,14 @@ icon = pygame.image.load(".\images\gameicon.png")
 pygame.display.set_icon(icon)
 rungame = True
 
+#Make game background
+background = pygame.image.load("./images/background.jpg")
+background = pygame.transform.scale(background, (1000,800))
 #Initialize player
 player = pygame.image.load("./images/spaceship.png")
-player = pygame.transform.scale(player, (100, 100))
+player = pygame.transform.scale(player, (75, 75))
 playerX = 450
-playerY = 600
+playerY = 675
 playerSpeed = 0
 def spawnPlayer(x,y):
     game.blit(player, (x,y) )
@@ -23,7 +26,7 @@ def spawnPlayer(x,y):
 
 #game loop
 while rungame:
-    game.fill((0,0,0))
+    game.blit(background, (0,0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             rungame = False
@@ -32,10 +35,10 @@ while rungame:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 #Move left
-                playerSpeed = -0.7
+                playerSpeed = -1
             if event.key == pygame.K_RIGHT:
                 #Move right
-                playerSpeed = 0.7
+                playerSpeed = 1
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 #Don't move
@@ -45,8 +48,8 @@ while rungame:
     #Adds boundaries to the player ship so they can't go out of game window
     if playerX <= 0:
         playerX = 0
-    elif playerX >= 900:
-        playerX = 900
+    elif playerX >= 925:
+        playerX = 925
  
     spawnPlayer(playerX, playerY)
     pygame.display.update()
