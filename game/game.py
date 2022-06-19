@@ -2,6 +2,7 @@ import pygame
 import random 
 import sys 
 
+
 #Start game
 pygame.init()
 
@@ -14,7 +15,7 @@ rungame = True
 
 #Make game background
 background = pygame.image.load("./images/background.jpg")
-background = pygame.transform.smoothscale(background, (1000,800))
+background = pygame.transform.smoothscale(background, (1000, 800))
 
 #Initialize player
 player = pygame.image.load("./images/spaceship.png")
@@ -33,7 +34,6 @@ alienY = random.randint(0,350)
 alienSpeed = 0
 def spawnAlien(x,y):
     game.blit(alien, (x,y) )
-
 
 
 #game loop
