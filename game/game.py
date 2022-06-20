@@ -40,6 +40,7 @@ def spawnAlien(x,y):
 while rungame:
     game.blit(background, (0,0))
     for event in pygame.event.get():
+        print(event)
         if event.type == pygame.QUIT:
             rungame = False
         
