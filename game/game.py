@@ -39,6 +39,7 @@ alien = element("./images/alien.png", (75, 75), (alienX, alienY))
 while rungame:
     background.spawn(game)
     for event in pygame.event.get():
+        print(event)
         if event.type == pygame.QUIT:
             rungame = False
         

@@ -11,7 +11,7 @@ class element:
         
 
     def spawn(self, screen):
-        screen.blit(self.sprite, self.coords)
+        screen.blit(self.sprite, (self.coords[0], self.coords[1]))
 
 
 
@@ -24,20 +24,23 @@ class player(element):
         self.velocity = velocity 
 
     def xmove(self, event_handler):
+        delta = 0
         if event_handler.type == pygame.KEYDOWN:
 
             if event_handler.key == pygame.K_LEFT:
                 #Move left
-                self.coords[0]+= self.velocity
+                delta = -self.velocity
 
             if event_handler.key == pygame.K_RIGHT:
                 #Move right
-                self.coords[0]+= self.velocity
+                delta = self.velocity
         
         if event_handler.type == pygame.KEYUP:
 
             if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT:
-                self.coords[0]+= 0
+                delta = 0
+        
+        self.coords[0]+=delta
     
         if self.coords[0] <= 0:
              self.coords[0] = 0
