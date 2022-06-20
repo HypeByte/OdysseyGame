@@ -2,7 +2,7 @@ import pygame
 import sys
 
 
-class element:
+class Element:
 
     def __init__(self, sprite, scale, coords):
         self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale)
@@ -15,38 +15,54 @@ class element:
 
 
 
-class player(element):
+class Player(Element):
 
-    def __init__(self, sprite, scale, coords, velocity):
+ 
+    def __init__(self, sprite, scale, coords, velocity, delta=0):
         self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale)
         self.scale = scale
         self.coords = coords
-        self.velocity = velocity 
+        self.velocity = velocity
+        self.delta = delta 
 
-    def xmove(self, event_handler):
-        delta = 0
+    def input(self, event_handler):
+    
         if event_handler.type == pygame.KEYDOWN:
 
             if event_handler.key == pygame.K_LEFT:
-                #Move left
-                delta = -self.velocity
+                    #Move left
+                    self.delta = -self.velocity
 
             if event_handler.key == pygame.K_RIGHT:
-                #Move right
-                delta = self.velocity
-        
+                    #Move right
+                    self.delta = self.velocity
+            
         if event_handler.type == pygame.KEYUP:
 
             if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT:
-                delta = 0
+                    self.delta = 0
+
+    def move(self):
+        self.coords[0]+= self.delta
         
-        self.coords[0]+=delta
-    
+    def getCords(self):
+        return (self.coords[0], self.coords[1])
+
+    def spawn(self, screen):
+
         if self.coords[0] <= 0:
              self.coords[0] = 0
 
         elif self.coords[0] >= 925:
              self.coords[0] = 925
+
+        screen.blit(self.sprite, self.getCords())
+                    
+       
+        
+    
+        
+        
                  
 
         
