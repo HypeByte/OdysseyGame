@@ -25,7 +25,7 @@ border = Element("./asset/images/border.png", (1150, 150), (-50, 650))
 background = Element("./asset/images/background.jpg", (1000, 800), (0,0))
 
 #Initialize player
-player = Player("./asset/images/spaceship.png", (100, 100), [450, 625], 10)
+player = Player("./asset/images/spaceship.png", (100, 100), [450, 625], 3)
 
 #Initialize alien
 alien_sprites = ["./asset/images/enemy1.png",
