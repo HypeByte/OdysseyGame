@@ -14,6 +14,10 @@ class Element:
     def spawn(self, screen):
         screen.blit(self.sprite, (self.coords[0], self.coords[1]))
 
+def spawnShield(target, screen):
+    shield = pygame.image.load("./asset/images/spr_shield.png")
+    shield = pygame.transform.smoothscale(shield, (150,150))
+    screen.blit(shield, (target.coords[0] - 25, target.coords[1] - 25))
 
 
 class Player(Element):
@@ -74,10 +78,12 @@ class Enemy(Element):
         if self.state == "spawn":
 
             if self.coords[1] < self.randY:
-                self.coords[1]+= 20 
+                self.coords[1]+= 3
                 screen.blit(self.sprite, (self.coords[0], self.coords[1]))
+                spawnShield(self, screen)
             else:
                 self.state = "display"
+                
 
         elif self.state == "display":
             screen.blit(self.sprite, ((self.coords[0], self.coords[1])))
