@@ -71,7 +71,7 @@ class Enemy(Element):
         self.scale = scale
         self.state = "spawn"
         self.coords = [random.randint(0, 925), -300]
-        self.randY = random.randint(0, 350)
+        self.randY = random.choice(range(0, 351, 10))
 
      def spawn(self, screen):
         
@@ -81,7 +81,7 @@ class Enemy(Element):
                 self.coords[1]+= 10
                 screen.blit(self.sprite, (self.coords[0], self.coords[1]))
                 spawnShield(self, screen)
-            else:
+            elif self.coords[1] == self.randY:
                 self.state = "display"
                 
 
