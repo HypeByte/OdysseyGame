@@ -18,8 +18,8 @@ class Element:
 
 class Player(Element):
 
- 
     def __init__(self, sprite, scale, coords, velocity, delta=0):
+        
         self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale)
         self.scale = scale
         self.coords = coords
@@ -63,10 +63,25 @@ class Enemy(Element):
 
      def __init__(self, sprites, scale):
         self.sprite = pygame.transform.smoothscale((pygame.image.load(random.choice(sprites))), scale)
+        self.sprite = pygame.transform.rotozoom(self.sprite, 180, 1)
         self.scale = scale
+        self.state = "spawn"
+        self.coords = [random.randint(0, 925), -300]
+        self.randY = random.randint(0, 350)
 
      def spawn(self, screen):
-        screen.blit(self.sprite, (random.randint(0, 925), random.randint(0, 350)))
+        
+        if self.state == "spawn":
+
+            if self.coords[1] < self.randY:
+                self.coords[1]+= 20 
+                screen.blit(self.sprite, (self.coords[0], self.coords[1]))
+            else:
+                self.state = "display"
+
+        elif self.state == "display":
+            screen.blit(self.sprite, ((self.coords[0], self.coords[1])))
+        
 
     
     
