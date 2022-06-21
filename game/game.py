@@ -19,7 +19,7 @@ rungame = True
 background = Element("./images/background.jpg", (1000, 800), (0,0))
 
 #Initialize player
-player = Player("./images/spaceship.png", (75,75), [450, 675], 1)
+player = Player("./images/spaceship.png", (100, 100), [450, 675], 1)
 
 #Initialize alien
 alienX = random.randint(0, 925)
@@ -31,7 +31,6 @@ while rungame:
     background.spawn(game)
     
     for event in pygame.event.get():
-        print(event)
         if event.type == pygame.QUIT:
             rungame = False
         

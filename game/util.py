@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random 
 
 
 class Element:
@@ -53,10 +54,22 @@ class Player(Element):
         if self.coords[0] <= 0:
              self.coords[0] = 0
 
-        elif self.coords[0] >= 925:
-             self.coords[0] = 925
+        elif self.coords[0] >= 900:
+             self.coords[0] = 900
 
         screen.blit(self.sprite, self.getCords())
+
+class Enemy(Element):
+
+     def __init__(self, sprites, scale):
+        self.sprite = pygame.transform.smoothscale((pygame.image.load(random.choice(sprites))), scale)
+        self.scale = scale
+
+     def spawn(self, screen):
+        screen.blit(self.sprite, (random.randint(0, 925), random.randint(0, 350)))
+
+    
+    
                     
        
         
