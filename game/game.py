@@ -8,7 +8,7 @@ from util import Element
 
 
 pygame.init() 
-
+clock = pygame.time.Clock()
 #Make game window called game
 game = pygame.display.set_mode((1000,800))
 pygame.display.set_caption("Odyssey")
@@ -16,11 +16,16 @@ icon = pygame.image.load("./asset/images/gameicon.png")
 pygame.display.set_icon(icon)
 rungame = True
 
+#Making space base
+border = Element("./asset/images/border.png", (1150, 150), (-50, 650))
+
+
+
 #Make game background
 background = Element("./asset/images/background.jpg", (1000, 800), (0,0))
 
 #Initialize player
-player = Player("./asset/images/spaceship.png", (100, 100), [450, 675], 1)
+player = Player("./asset/images/spaceship.png", (100, 100), [450, 625], 10)
 
 #Initialize alien
 alien_sprites = ["./asset/images/enemy1.png",
@@ -28,6 +33,7 @@ alien_sprites = ["./asset/images/enemy1.png",
                  "./asset/images/enemy3.png",
                  "./asset/images/enemy4.png"]
 alien = Enemy(alien_sprites, (100, 100))
+alien2 = Enemy(alien_sprites, (100, 100))
 
 #game loop
 while rungame:
@@ -41,8 +47,10 @@ while rungame:
         
        
         
-    
+    border.spawn(game)
     player.move()
     player.spawn(game)
     alien.spawn(game)
+    alien2.spawn(game)
     pygame.display.update()
+   

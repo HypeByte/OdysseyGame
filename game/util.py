@@ -6,7 +6,7 @@ import random
 class Element:
 
     def __init__(self, sprite, scale, coords):
-        self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale)
+        self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale).convert_alpha()
         self.scale = scale
         self.coords = coords
         
@@ -24,7 +24,7 @@ class Player(Element):
 
     def __init__(self, sprite, scale, coords, velocity, delta=0):
         
-        self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale)
+        self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale).convert_alpha()
         self.scale = scale
         self.coords = coords
         self.velocity = velocity
@@ -66,7 +66,7 @@ class Player(Element):
 class Enemy(Element):
 
      def __init__(self, sprites, scale):
-        self.sprite = pygame.transform.smoothscale((pygame.image.load(random.choice(sprites))), scale)
+        self.sprite = pygame.transform.smoothscale((pygame.image.load(random.choice(sprites))), scale).convert_alpha()
         self.sprite = pygame.transform.rotozoom(self.sprite, 180, 1)
         self.scale = scale
         self.state = "spawn"
@@ -78,7 +78,7 @@ class Enemy(Element):
         if self.state == "spawn":
 
             if self.coords[1] < self.randY:
-                self.coords[1]+= 3
+                self.coords[1]+= 10
                 screen.blit(self.sprite, (self.coords[0], self.coords[1]))
                 spawnShield(self, screen)
             else:
