@@ -1,7 +1,6 @@
 import pygame 
 import random 
 import sys
-from util import Enemy
 from util import Player
 from util import Element
 
@@ -23,11 +22,9 @@ background = Element("./images/background.jpg", (1000, 800), (0,0))
 player = Player("./images/spaceship.png", (100, 100), [450, 675], 1)
 
 #Initialize alien
-alien_sprites = ["./images/Faction5-Spaceships-by-MillionthVector/F5S1.png", 
-                 "./images/Faction5-Spaceships-by-MillionthVector/F5S2.png",
-                 "./images/Faction5-Spaceships-by-MillionthVector/F5S3.png",
-                 "./images/Faction5-Spaceships-by-MillionthVector/F5S4.png"]
-alien = Enemy(alien_sprites, (100, 100))
+alienX = random.randint(0, 925)
+alienY = random.randint(0,350)
+alien = Element("./images/alien.png", (75, 75), (alienX, alienY))
 
 #game loop
 while rungame:
