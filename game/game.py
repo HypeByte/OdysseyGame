@@ -2,7 +2,7 @@ import pygame
 import random 
 import sys
 from pygame import mixer
-from asset.images.explosion.explosion import Explosion
+from explosion import Explosion
 from util import Enemy
 from util import Player
 from util import Element

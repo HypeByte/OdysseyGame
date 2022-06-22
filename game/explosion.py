@@ -35,7 +35,6 @@ class Explosion:
 
     def update(self):
         if int(self.frame + .5) < len(self.animation) and self.state == True:
-            print(int(self.frame))
             self.frame+=.5
             self.image = self.animation[int(self.frame)]
         
