@@ -16,9 +16,10 @@ explosion10 = pygame.image.load("./asset/images/explosion/explosion10.png")
 
 class Explosion:
 
-    def __init__(self, screen, coords):
+    def __init__(self, screen, coords, size):
         self.screen = screen
         self.coords = coords
+        self.size = size
         self.animation = [explosion1,
                           explosion2,
                           explosion3,
@@ -29,6 +30,8 @@ class Explosion:
                           explosion8,
                           explosion9,
                           explosion10]
+        for i in range(len(self.animation)):
+            self.animation[i] = pygame.transform.smoothscale(self.animation[i], self.size)
         self.frame = 0
         self.image = self.animation[int(self.frame)]
         self.state = True

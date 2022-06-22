@@ -26,7 +26,7 @@ redLaser = Element("./asset/images/greenlaser.png", (20, 30), (460, 625))
 
 #Make game background
 background = Element("./asset/images/background.jpg", (1000, 800), (0,0))
-bomb = Explosion(game, (450, 400))
+bomb = Explosion(game, (450, 400), (300, 300))
 
 #Initialize player
 player_sprites = ["./asset/images/player1.png",
