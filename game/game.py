@@ -19,6 +19,7 @@ rungame = True
 #Making space base
 border = Element("./asset/images/border.png", (1150, 150), (-50, 650))
 
+redLaser = Element("./asset/images/greenlaser.png", (20, 30), (460, 625))
 
 
 #Make game background
@@ -57,5 +58,6 @@ while rungame:
     player.spawn(game)
     alien.spawn(game)
     alien2.spawn(game)
+    redLaser.spawn(game)
     pygame.display.update()
    
