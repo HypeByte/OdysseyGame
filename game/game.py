@@ -2,9 +2,11 @@ import pygame
 import random 
 import sys
 from pygame import mixer
+from asset.images.explosion.explosion import Explosion
 from util import Enemy
 from util import Player
 from util import Element
+
 
 
 pygame.init() 
@@ -24,6 +26,7 @@ redLaser = Element("./asset/images/greenlaser.png", (20, 30), (460, 625))
 
 #Make game background
 background = Element("./asset/images/background.jpg", (1000, 800), (0,0))
+bomb = Explosion(game, (450, 400))
 
 #Initialize player
 player_sprites = ["./asset/images/player1.png",
@@ -50,14 +53,15 @@ while rungame:
             rungame = False
         
         player.input(event)
-        
-       
-        
+         
+    bomb.explode()   
     border.spawn(game)
     player.move()
     player.spawn(game)
     alien.spawn(game)
     alien2.spawn(game)
     redLaser.spawn(game)
+    bomb.update()  
     pygame.display.update()
+    
    
