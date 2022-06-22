@@ -34,7 +34,7 @@ player_sprites = ["./asset/images/player1.png",
                   "./asset/images/player3.png",
                   "./asset/images/player4.png" ]
 player = Player(player_sprites[3], (100, 100), [450, 625], 20)
-redlaser = BulletSet(player, game)
+greenlaser = BulletSet(player, game)
 
 #Initialize alien
 alien_sprites = ["./asset/images/enemy1.png",
@@ -43,6 +43,8 @@ alien_sprites = ["./asset/images/enemy1.png",
                  "./asset/images/enemy4.png"]
 alien = Enemy(alien_sprites, (100, 100))
 alien2 = Enemy(alien_sprites, (100, 100))
+redlaser1 = BulletSet(alien, game)
+redlaser2 = BulletSet(alien2, game)
 
 #game loop
 while rungame:
@@ -61,7 +63,9 @@ while rungame:
     player.spawn(game)
     alien.spawn(game)
     alien2.spawn(game)
-    redlaser.display()
+    greenlaser.display()
+    redlaser1.enemydisplay()
+    redlaser2.enemydisplay()
     bomb.update()  
     pygame.display.update()
     

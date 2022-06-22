@@ -2,6 +2,20 @@ import pygame
 import sys
 import random 
 
+bullet_map = {
+
+    "./asset/images/player1.png" : (10, 70),
+    "./asset/images/player2.png" : (20, 60),
+    "./asset/images/player3.png" : (22, 56),
+    "./asset/images/player4.png" : (10, 70),
+    "./asset/images/enemy1.png" : (15, 70),
+    "./asset/images/enemy2.png" : (25, 60),
+    "./asset/images/enemy3.png" : (27, 58),
+    "./asset/images/enemy4.png" : (15, 70)
+
+}
+
+
 
 class Element:
 
@@ -28,21 +42,26 @@ class BulletSet(Element):
              self.host = Player
              self.sprite = pygame.image.load("./asset/images/greenlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
-             self.bulletcoords = [ (ship.coords[0] + 10, 625), (ship.coords[0] + 70, 625) ]
+             self.bulletcoords = [ (ship.coords[0] + ship.gunpos[0], 625), (ship.coords[0] +  ship.gunpos[1], 625) ]
              self.direct = 1
             
         elif type(ship) == Enemy:
              self.host = Enemy
              self.sprite = pygame.image.load("./asset/images/redlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
-             self.bulletcoords = [ (ship.coords[0] + 10, self.coords[1] + 75), (ship.coords[0] + 70, self.coords[1] + 75) ]
+             self.bulletcoords = [ (ship.coords[0] + ship.gunpos[0], ship.randY + 75), (ship.coords[0] + ship.gunpos[1], ship.randY + 75) ]
              self.direct = -1
         self.screen = screen
 
     def display(self):
         self.screen.blit(self.sprite, self.bulletcoords[0])
         self.screen.blit(self.sprite, self.bulletcoords[1])
-        
+
+    def enemydisplay(self):
+        if self.ship.state == "display":
+            self.screen.blit(self.sprite, self.bulletcoords[0])
+            self.screen.blit(self.sprite, self.bulletcoords[1])
+
 
 
 class Player(Element):
@@ -54,6 +73,7 @@ class Player(Element):
         self.coords = coords
         self.velocity = velocity
         self.delta = delta 
+        self.gunpos = bullet_map[sprite]
 
     def input_movement(self, event_handler):
     
@@ -91,12 +111,14 @@ class Player(Element):
 class Enemy(Element):
 
      def __init__(self, sprites, scale):
-        self.sprite = pygame.transform.smoothscale((pygame.image.load(random.choice(sprites))), scale).convert_alpha()
+        rand = random.choice(sprites)
+        self.sprite = pygame.transform.smoothscale(pygame.image.load(rand), scale).convert_alpha()
         self.sprite = pygame.transform.rotozoom(self.sprite, 180, 1)
         self.scale = scale
         self.state = "spawn"
         self.coords = [random.randint(0, 925), -300]
         self.randY = random.choice(range(0, 351, 10))
+        self.gunpos = bullet_map[rand]
 
      def spawn(self, screen):
         
