@@ -20,6 +20,31 @@ def spawnShield(target, screen):
     screen.blit(shield, (target.coords[0] - 25, target.coords[1] - 25))
 
 
+class BulletSet(Element):
+
+    def __init__(self, ship, screen):
+        self.ship = ship
+        if type(ship) == Player:
+             self.host = Player
+             self.sprite = pygame.image.load("./asset/images/greenlaser.png")
+             self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
+             self.bulletcoords = [ (ship.coords[0] + 10, 625), (ship.coords[0] + 70, 625) ]
+             self.direct = 1
+            
+        elif type(ship) == Enemy:
+             self.host = Enemy
+             self.sprite = pygame.image.load("./asset/images/redlaser.png")
+             self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
+             self.bulletcoords = [ (ship.coords[0] + 10, self.coords[1] + 75), (ship.coords[0] + 70, self.coords[1] + 75) ]
+             self.direct = -1
+        self.screen = screen
+
+    def display(self):
+        self.screen.blit(self.sprite, self.bulletcoords[0])
+        self.screen.blit(self.sprite, self.bulletcoords[1])
+        
+
+
 class Player(Element):
 
     def __init__(self, sprite, scale, coords, velocity, delta=0):
@@ -30,7 +55,7 @@ class Player(Element):
         self.velocity = velocity
         self.delta = delta 
 
-    def input(self, event_handler):
+    def input_movement(self, event_handler):
     
         if event_handler.type == pygame.KEYDOWN:
 

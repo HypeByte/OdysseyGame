@@ -6,7 +6,7 @@ from explosion import Explosion
 from blueprints import Enemy
 from blueprints import Player
 from blueprints import Element
-
+from blueprints import BulletSet
 
 
 pygame.init() 
@@ -21,7 +21,7 @@ rungame = True
 #Making space base
 border = Element("./asset/images/border.png", (1150, 150), (-50, 650))
 
-redLaser = Element("./asset/images/greenlaser.png", (20, 30), (460, 625))
+
 
 
 #Make game background
@@ -34,6 +34,7 @@ player_sprites = ["./asset/images/player1.png",
                   "./asset/images/player3.png",
                   "./asset/images/player4.png" ]
 player = Player(player_sprites[3], (100, 100), [450, 625], 20)
+redlaser = BulletSet(player, game)
 
 #Initialize alien
 alien_sprites = ["./asset/images/enemy1.png",
@@ -52,7 +53,7 @@ while rungame:
         if event.type == pygame.QUIT:
             rungame = False
         
-        player.input(event)
+        player.input_movement(event)
          
     bomb.explode()   
     border.spawn(game)
@@ -60,7 +61,7 @@ while rungame:
     player.spawn(game)
     alien.spawn(game)
     alien2.spawn(game)
-    redLaser.spawn(game)
+    redlaser.display()
     bomb.update()  
     pygame.display.update()
     
