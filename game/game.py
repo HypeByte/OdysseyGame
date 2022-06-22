@@ -3,9 +3,9 @@ import random
 import sys
 from pygame import mixer
 from explosion import Explosion
-from util import Enemy
-from util import Player
-from util import Element
+from blueprints import Enemy
+from blueprints import Player
+from blueprints import Element
 
 
 
