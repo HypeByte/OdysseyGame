@@ -33,7 +33,7 @@ player_sprites = ["./asset/images/player1.png",
                   "./asset/images/player2.png",
                   "./asset/images/player3.png",
                   "./asset/images/player4.png" ]
-player = Player(player_sprites[3], (100, 100), [450, 625], 20)
+player = Player(player_sprites[3], (100, 100), [450, 625], 20, game)
 greenlaser = BulletSet(player, game)
 
 #Initialize alien
@@ -41,10 +41,13 @@ alien_sprites = ["./asset/images/enemy1.png",
                  "./asset/images/enemy2.png",
                  "./asset/images/enemy3.png",
                  "./asset/images/enemy4.png"]
-alien = Enemy(alien_sprites, (100, 100))
-alien2 = Enemy(alien_sprites, (100, 100))
+alien = Enemy(alien_sprites, (100, 100), game)
+alien2 = Enemy(alien_sprites, (100, 100), game)
 redlaser1 = BulletSet(alien, game)
 redlaser2 = BulletSet(alien2, game)
+
+
+
 
 #game loop
 while rungame:
@@ -56,17 +59,20 @@ while rungame:
             rungame = False
         
         player.input_movement(event)
+        greenlaser.trigger(event)
+        redlaser1.trigger(event)
+        redlaser2.trigger(event)
          
     bomb.explode()   
     border.spawn(game)
     player.move()
-    player.spawn(game)
-    alien.spawn(game)
-    alien2.spawn(game)
-    greenlaser.display()
-    redlaser1.enemydisplay()
-    redlaser2.enemydisplay()
-    bomb.update()  
+    player.spawn()
+    alien.spawn()
+    alien2.spawn()
+    greenlaser.fire()
+    redlaser1.fire()
+    redlaser2.fire()
+     
     pygame.display.update()
     
    
