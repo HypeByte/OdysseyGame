@@ -3,6 +3,11 @@ import pygame
 import sys
 import random 
 
+'''
+ A dictionary used to match different player and enemy ships
+ to the appropriate transformation tuple, which is added to the laser
+ coordinates so that the laser is positioned perfectly
+'''
 bullet_map = {
 
     "./asset/images/player1.png" : (10, 70),
@@ -16,8 +21,14 @@ bullet_map = {
 
 }
 
+#Shield mechanic function used to spawn a shield around a sprite object
+def spawnShield(target, screen):
+    shield = pygame.image.load("./asset/images/spr_shield.png")
+    shield = pygame.transform.smoothscale(shield, (150,150))
+    screen.blit(shield, (target.coords[0] - 25, target.coords[1] - 25))
 
 
+#Simple element class that allows for easy initializing of surfaces and sprites
 class Element:
 
     def __init__(self, sprite, scale, coords):
@@ -25,16 +36,11 @@ class Element:
         self.scale = scale
         self.coords = coords
         
-
+    #spawn element on gui
     def spawn(self, screen):
         screen.blit(self.sprite, (self.coords[0], self.coords[1]))
 
-def spawnShield(target, screen):
-    shield = pygame.image.load("./asset/images/spr_shield.png")
-    shield = pygame.transform.smoothscale(shield, (150,150))
-    screen.blit(shield, (target.coords[0] - 25, target.coords[1] - 25))
-
-
+#Iniitializes a pair of lasers/bullets based on the ship you are attaching them on
 class BulletSet(Element):
 
     def __init__(self, ship, screen):
@@ -55,7 +61,8 @@ class BulletSet(Element):
              self.bulletcoords = [ [self.x + ship.gunpos[0], ship.randY + 75], [self.x + ship.gunpos[1], ship.randY + 75] ]
              self.velocity = 9
         self.screen = screen
-    
+
+    #updates the bullets positions with respect to the ships new position   
     def __update(self):
         if self.host == Player:
             self.bulletcoords = [ [self.x + self.ship.gunpos[0], 625], [self.x + self.ship.gunpos[1], 625] ]
@@ -64,6 +71,7 @@ class BulletSet(Element):
             self.bulletcoords = [ [self.x + self.ship.gunpos[0], self.ship.randY + 75], [self.x + self.ship.gunpos[1], self.ship.randY + 75] ]
             self.trigget_state = False
 
+    #Looks for if you press the up arrow key, then sets trigger state to true to prepare for the firing of the laser
     def trigger(self, event_handler):
         if event_handler.type == pygame.KEYDOWN:
             if event_handler.key == pygame.K_UP:
@@ -71,6 +79,7 @@ class BulletSet(Element):
                 self.x = self.ship.coords[0]
                 self.bulletcoords = [ [self.x + self.ship.gunpos[0], 625], [self.x +  self.ship.gunpos[1], 625] ]
 
+    #Used to animate laser across screen when trigger has been activated
     def fire(self):
         if self.trigger_state == True:
 
@@ -91,7 +100,8 @@ class BulletSet(Element):
                 if self.bulletcoords[0][1] > 1000 or self.bulletcoords[1][1] > 1000:
                     self.__update()
 
-class Bullets():
+#Serves as a dynamic list of bullet sets so that you can appropriately spawn in and delete bullet objects
+class Bullets:
 
     def __init__(self):
         self.bullets = []
@@ -108,7 +118,7 @@ class Bullets():
             
         
         
-
+#Player object
 class Player(Element):
 
     def __init__(self, sprite, scale, coords, velocity, screen, delta=0):
@@ -122,6 +132,7 @@ class Player(Element):
         self.gunpos = bullet_map[sprite]
         self.laser = BulletSet(self, self.screen)
 
+    #Detects if arrow keys are pressed, then appropriately changes the delta value which is the the change in x pos for the player so that the player can move
     def input_movement(self, event_handler):
     
         if event_handler.type == pygame.KEYDOWN:
@@ -139,12 +150,15 @@ class Player(Element):
             if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT:
                     self.delta = 0
 
+    #Updates the x pos of the player with the appropriate change or delta based on input
     def move(self):
         self.coords[0]+= self.delta
-        
+
+    #Returns the coordinates of the player as a tuple      
     def getCords(self):
         return (self.coords[0], self.coords[1])
 
+    #Displays the player on the screen
     def spawn(self):
 
         if self.coords[0] <= 0:
@@ -155,6 +169,7 @@ class Player(Element):
 
         self.screen.blit(self.sprite, self.getCords())
 
+#Enemy object
 class Enemy(Element):
 
      def __init__(self, sprites, scale, screen):
@@ -168,8 +183,8 @@ class Enemy(Element):
         self.randY = random.choice(range(0, 351, 10))
         self.gunpos = bullet_map[rand]
 
+     #Displays enemy on screen
      def spawn(self):
-        
         if self.state == "spawn":
 
             if self.coords[1] < self.randY:

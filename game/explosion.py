@@ -2,6 +2,7 @@ import pygame
 import os
 import sys
 
+#Loading in all the sprites of the explosion for our animation frames
 explosion1 = pygame.image.load("./asset/images/explosion/explosion1.png")
 explosion2 = pygame.image.load("./asset/images/explosion/explosion2.png")                               
 explosion3 = pygame.image.load("./asset/images/explosion/explosion3.png")                             
@@ -13,7 +14,7 @@ explosion8 = pygame.image.load("./asset/images/explosion/explosion8.png")
 explosion9 = pygame.image.load("./asset/images/explosion/explosion9.png")                             
 explosion10 = pygame.image.load("./asset/images/explosion/explosion10.png")                              
 
-
+#Object used to initialize and target explosions
 class Explosion:
 
     def __init__(self, screen, coords, size):
@@ -36,6 +37,7 @@ class Explosion:
         self.image = self.animation[int(self.frame)]
         self.state = True
 
+    #Updates to the next animation frame, animation frame swith to frame ratio: 1 : 2
     def update(self):
         if int(self.frame + .5) < len(self.animation) and self.state == True:
             self.frame+=.5
@@ -44,6 +46,7 @@ class Explosion:
         else:
             self.state = False
 
+    #Displays a frame of the explosion
     def explode(self):
         if self.state == True:
             self.screen.blit(self.image, self.coords)
