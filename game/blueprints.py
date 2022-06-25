@@ -32,7 +32,6 @@ class Player(Element):
 
     shiptype = "Player"
     def __init__(self, sprite, scale, coords, velocity, screen, delta=0):
-        
         self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale).convert_alpha()
         self.scale = scale
         self.coords = coords
@@ -41,7 +40,8 @@ class Player(Element):
         self.screen = screen
         self.gunpos = bullet_map[sprite]
         self.laser = Bullets(self)
-        self.firerate = 0
+        self.triggertime = 0
+        self.addbulletstate = False
 
     #Detects if arrow keys are pressed, then appropriately changes the delta value which is the the change in x pos for the player so that the player can move
     def input(self, event_handler):
@@ -56,24 +56,18 @@ class Player(Element):
                 #Move right
                 self.delta = self.velocity
             
-            if event_handler.key == pygame.K_UP: 
-                #shot has been fired
-                if len(self.laser.bullets) == 0:
-                    self.laser.newBullet()
-                    self.firerate = pygame.time.get_ticks()
-                
-                elif pygame.time.get_ticks() - self.firerate > 100:
-                    self.laser.newBullet()
-                    self.firerate = pygame.time.get_ticks()
-                
-                else:
-                    print("Firerate test")
-
-        if event_handler.type == pygame.KEYUP:
+            if event_handler.key == pygame.K_UP: #Checks if the up arrow has been pressed
+                self.addbulletstate = True #makes add bullet state true, meaning that it is possible to append a new bullet
+               
+        if event_handler.type == pygame.KEYUP: 
 
             if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT:
-                    self.delta = 0
+                self.delta = 0
 
+            if event_handler.key == pygame.K_UP:
+                self.addbulletstate = False #If the up arrow is released make the add bullet state false
+            
+            
     #Updates the x pos of the player with the appropriate change or delta based on input
     def move(self):
         self.coords[0]+= self.delta
@@ -93,10 +87,22 @@ class Player(Element):
 
         self.screen.blit(self.sprite, self.getCords())
 
+    
     def shoot(self):
-         for bullet in self.laser.bullets:
-             bullet.fire()
-
+        for bullet in self.laser.bullets: #Animates the bullets to shoot
+            bullet.fire()
+        
+        if self.addbulletstate == True: #Prepares to add a new bullet
+            if len(self.laser.bullets) == 0:
+                self.laser.newBullet()
+                self.triggertime = pygame.time.get_ticks()
+                
+            elif pygame.time.get_ticks() - self.triggertime > 100:
+                self.laser.newBullet()
+                self.triggertime = pygame.time.get_ticks()
+                
+        
+    
 #Enemy object
 class Enemy(Element):
 

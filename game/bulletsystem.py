@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 
+#A dictionary that maps differet ship file to a transformation tuple, which transforms ship coordinates to get appropriate coordinates of bullets for each different ship
 bullet_map = {
 
     "./asset/images/player1.png" : (10, 70),
@@ -34,7 +35,7 @@ class BulletSet():
              self.velocity = 9
         self.screen = screen
     
-    def fire(self):
+    def fire(self): #displays bullet and updates its positions to be displayed next time
         if self.ship.shiptype == "Player":
                 self.screen.blit(self.sprite, self.bulletcoords[0])
                 self.screen.blit(self.sprite, self.bulletcoords[1])

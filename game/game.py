@@ -1,7 +1,7 @@
 import pygame 
 import random 
 import sys
-from pygame import mixer
+from pygame import K_DOWN, mixer
 from explosion import Explosion
 from blueprints import Element
 from blueprints import Enemy
@@ -58,7 +58,7 @@ while rungame:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Exit window of x button is pressed
             rungame = False
-
+    
         #Our input scan functions that take in event as the event_handler       
         player.input(event)
         
@@ -69,8 +69,6 @@ while rungame:
     alien.spawn()
     alien2.spawn()
     player.shoot()
-    
-     
     pygame.display.update()
     
    
