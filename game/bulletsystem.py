@@ -26,7 +26,7 @@ class BulletSet():
              self.sprite = pygame.image.load("./asset/images/greenlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
              self.bulletcoords = [ [self.x + ship.gunpos[0], 625], [self.x +  ship.gunpos[1], 625] ]
-             self.velocity = -9
+             self.velocity = -18
             
         elif ship.shiptype == "Enemy":
              self.sprite = pygame.image.load("./asset/images/redlaser.png")

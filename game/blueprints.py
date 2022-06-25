@@ -97,7 +97,7 @@ class Player(Element):
                 self.laser.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
-            elif pygame.time.get_ticks() - self.triggertime > 100:
+            elif pygame.time.get_ticks() - self.triggertime > 100: #Adds a firerate for firing new bullets
                 self.laser.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
