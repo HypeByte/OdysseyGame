@@ -59,7 +59,7 @@ while rungame:
             rungame = False
 
         #Our input scan functions that take in event as the event_handler       
-        player.input_movement(event)
+        player.input(event)
         greenlaser.trigger(event)
         redlaser1.trigger(event)
         redlaser2.trigger(event)

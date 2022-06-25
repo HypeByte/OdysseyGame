@@ -46,7 +46,6 @@ class BulletSet(Element):
     def __init__(self, ship, screen):
         self.ship = ship
         self.x = ship.coords[0]
-        self.trigger_state = False
         if type(ship) == Player:
              self.host = Player
              self.sprite = pygame.image.load("./asset/images/greenlaser.png")
@@ -62,7 +61,8 @@ class BulletSet(Element):
              self.velocity = 9
         self.screen = screen
 
-    #updates the bullets positions with respect to the ships new position   
+ 
+    '''
     def __update(self):
         if self.host == Player:
             self.bulletcoords = [ [self.x + self.ship.gunpos[0], 625], [self.x + self.ship.gunpos[1], 625] ]
@@ -99,25 +99,36 @@ class BulletSet(Element):
                 self.bulletcoords[1][1]+= self.velocity
                 if self.bulletcoords[0][1] > 1000 or self.bulletcoords[1][1] > 1000:
                     self.__update()
+'''
 
 #Serves as a dynamic list of bullet sets so that you can appropriately spawn in and delete bullet objects
 class Bullets:
 
-    def __init__(self):
+    def __init__(self, ship):
+        self.ship = ship
         self.bullets = []
     
     def last(self):
         return self.bullets[ len(self.bullets) - 1 ]
     
-    def newBullet(self, ship):
-        self.bullets.append( BulletSet(ship, ship.screen) )
+    def newBullet(self):
+        self.bullets.append( BulletSet(self.ship, self.ship.screen) )
+
+    def shoot(self):
+        for bullet in self.bullets:
+             self.screen.blit(self.sprite, self.bulletcoords[0])
+             self.screen.blit(self.sprite, self.bulletcoords[1])
+             self.bulletcoords[0][1]+= self.velocity
+             self.bulletcoords[1][1]+= self.velocity
     
+
+
 
     
 
-            
-        
-        
+    
+
+                    
 #Player object
 class Player(Element):
 
@@ -130,21 +141,31 @@ class Player(Element):
         self.delta = delta 
         self.screen = screen
         self.gunpos = bullet_map[sprite]
-        self.laser = BulletSet(self, self.screen)
+        self.laser = Bullets(self)
+        self.firerate = 0
 
     #Detects if arrow keys are pressed, then appropriately changes the delta value which is the the change in x pos for the player so that the player can move
-    def input_movement(self, event_handler):
+    def input(self, event_handler):
     
         if event_handler.type == pygame.KEYDOWN:
 
             if event_handler.key == pygame.K_LEFT:
-                    #Move left
-                    self.delta = -self.velocity
+                #Move left
+                self.delta = -self.velocity
 
             if event_handler.key == pygame.K_RIGHT:
-                    #Move right
-                    self.delta = self.velocity
+                #Move right
+                self.delta = self.velocity
             
+            if event_handler.key == pygame.K_UP: 
+                #shot has been fired
+                if len(self.laser) == 0:
+                    self.laser.newBullet()
+                    self.firerate = pygame.time.get_ticks()
+                
+                elif pygame.time.get_ticks() - self.firerate > 1000:
+                    self.laser.newBullet()
+
         if event_handler.type == pygame.KEYUP:
 
             if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT:
