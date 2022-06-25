@@ -86,6 +86,7 @@ class Player(Element):
              self.coords[0] = 900
 
         self.screen.blit(self.sprite, self.getCords())
+        spawnShield(self, self.screen)
 
     
     def shoot(self):
