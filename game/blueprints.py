@@ -39,7 +39,7 @@ class Player(Element):
         self.delta = delta 
         self.screen = screen
         self.gunpos = bullet_map[sprite]
-        self.laser = Bullets(self)
+        self.bullets = Bullets(self)
         self.triggertime = 0
         self.addbulletstate = False
 
@@ -90,16 +90,16 @@ class Player(Element):
 
     
     def shoot(self):
-        for bullet in self.laser.bullets: #Animates the bullets to shoot
+        for bullet in self.bullets.bullets: #Animates the bullets to shoot
             bullet.fire()
         
         if self.addbulletstate == True: #Prepares to add a new bullet
-            if len(self.laser.bullets) == 0:
-                self.laser.newBullet()
+            if len(self.bullets.bullets) == 0:
+                self.bullets.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
             elif pygame.time.get_ticks() - self.triggertime > 100: #Adds a firerate for firing new bullets
-                self.laser.newBullet()
+                self.bullets.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
         
@@ -118,6 +118,7 @@ class Enemy(Element):
         self.coords = [random.randint(0, 925), -300]
         self.randY = random.choice(range(0, 351, 10))
         self.gunpos = bullet_map[rand]
+        self.enemybullet = BulletSet(self, screen)
 
      #Displays enemy on screen
      def spawn(self):
@@ -133,6 +134,11 @@ class Enemy(Element):
 
         elif self.state == "display":
             self.screen.blit(self.sprite, ((self.coords[0], self.coords[1])))
+    
+     def autoshoot(self):
+        if self.state == "display":
+            self.enemybullet.fire()
+               
         
 
     

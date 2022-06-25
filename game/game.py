@@ -34,7 +34,7 @@ player_sprites = ["./asset/images/player1.png",
                   "./asset/images/player2.png",
                   "./asset/images/player3.png",
                   "./asset/images/player4.png" ]
-player = Player(player_sprites[3], (100, 100), [450, 625], 20, game)
+player = Player(player_sprites[3], (100, 100), [450, 625], 40, game)
 
 
 #Initialize aliens or the enemy ships
@@ -44,6 +44,7 @@ alien_sprites = ["./asset/images/enemy1.png",
                  "./asset/images/enemy4.png"]
 alien = Enemy(alien_sprites, (100, 100), game)
 alien2 = Enemy(alien_sprites, (100, 100), game)
+alien3 = Enemy(alien_sprites, (100, 100), game)
 
 
 
@@ -51,7 +52,7 @@ alien2 = Enemy(alien_sprites, (100, 100), game)
 
 #game loop
 while rungame:
-    clock.tick(30) #Caps the fps to 30 so that there is no fps lag or display lag
+    clock.tick(20) #Caps the fps to 30 so that there is no fps lag or display lag
     background.spawn(game)
 
     #Input scan loop   
@@ -68,7 +69,11 @@ while rungame:
     player.spawn()
     alien.spawn()
     alien2.spawn()
+    alien3.spawn()
     player.shoot()
+    alien.autoshoot()
+    alien2.autoshoot()
+    alien3.autoshoot()
     pygame.display.update()
     
    

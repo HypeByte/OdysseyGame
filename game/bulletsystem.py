@@ -32,7 +32,8 @@ class BulletSet():
              self.sprite = pygame.image.load("./asset/images/redlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
              self.bulletcoords = [ [self.x + ship.gunpos[0], ship.randY + 75], [self.x + ship.gunpos[1], ship.randY + 75] ]
-             self.velocity = 9
+             self.velocity = 18
+             self.nextfire = False
         self.screen = screen
     
     def fire(self): #displays bullet and updates its positions to be displayed next time
@@ -43,6 +44,17 @@ class BulletSet():
                 self.bulletcoords[1][1]+= self.velocity
                 if self.bulletcoords[0][1] < -30 or self.bulletcoords[1][1] < -30:
                     del self
+        
+        elif self.ship.shiptype == "Enemy":
+                self.screen.blit(self.sprite, self.bulletcoords[0])
+                self.screen.blit(self.sprite, self.bulletcoords[1])
+                self.bulletcoords[0][1]+= self.velocity
+                self.bulletcoords[1][1]+= self.velocity
+                if self.bulletcoords[0][1] > 750 or self.bulletcoords[1][1] > 750:
+                    self.bulletcoords[1][1] = self.ship.randY + 75
+                    self.bulletcoords[0][1] = self.ship.randY + 75
+                
+            
 
 #Serves as a dynamic list of bullet sets so that you can appropriately spawn in and delete bullet objects
 class Bullets(BulletSet):
