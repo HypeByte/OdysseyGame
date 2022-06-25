@@ -1,25 +1,11 @@
-from asyncio.windows_events import NULL
 import pygame
 import sys
-import random 
+import random
+import bulletsystem
+from bulletsystem import bullet_map
+from bulletsystem import BulletSet
+from bulletsystem import Bullets 
 
-'''
- A dictionary used to match different player and enemy ships
- to the appropriate transformation tuple, which is added to the laser
- coordinates so that the laser is positioned perfectly
-'''
-bullet_map = {
-
-    "./asset/images/player1.png" : (10, 70),
-    "./asset/images/player2.png" : (20, 60),
-    "./asset/images/player3.png" : (22, 56),
-    "./asset/images/player4.png" : (10, 70),
-    "./asset/images/enemy1.png" : (15, 70),
-    "./asset/images/enemy2.png" : (25, 60),
-    "./asset/images/enemy3.png" : (27, 58),
-    "./asset/images/enemy4.png" : (15, 70)
-
-}
 
 #Shield mechanic function used to spawn a shield around a sprite object
 def spawnShield(target, screen):
@@ -40,98 +26,11 @@ class Element:
     def spawn(self, screen):
         screen.blit(self.sprite, (self.coords[0], self.coords[1]))
 
-#Iniitializes a pair of lasers/bullets based on the ship you are attaching them on
-class BulletSet(Element):
-
-    def __init__(self, ship, screen):
-        self.ship = ship
-        self.x = ship.coords[0]
-        if type(ship) == Player:
-             self.host = Player
-             self.sprite = pygame.image.load("./asset/images/greenlaser.png")
-             self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
-             self.bulletcoords = [ [self.x + ship.gunpos[0], 625], [self.x +  ship.gunpos[1], 625] ]
-             self.velocity = -9
-            
-        elif type(ship) == Enemy:
-             self.host = Enemy
-             self.sprite = pygame.image.load("./asset/images/redlaser.png")
-             self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
-             self.bulletcoords = [ [self.x + ship.gunpos[0], ship.randY + 75], [self.x + ship.gunpos[1], ship.randY + 75] ]
-             self.velocity = 9
-        self.screen = screen
-
- 
-    '''
-    def __update(self):
-        if self.host == Player:
-            self.bulletcoords = [ [self.x + self.ship.gunpos[0], 625], [self.x + self.ship.gunpos[1], 625] ]
-            self.trigger_state = False
-        else:
-            self.bulletcoords = [ [self.x + self.ship.gunpos[0], self.ship.randY + 75], [self.x + self.ship.gunpos[1], self.ship.randY + 75] ]
-            self.trigget_state = False
-
-    #Looks for if you press the up arrow key, then sets trigger state to true to prepare for the firing of the laser
-    def trigger(self, event_handler):
-        if event_handler.type == pygame.KEYDOWN:
-            if event_handler.key == pygame.K_UP:
-                self.trigger_state = True
-                self.x = self.ship.coords[0]
-                self.bulletcoords = [ [self.x + self.ship.gunpos[0], 625], [self.x +  self.ship.gunpos[1], 625] ]
-
-    #Used to animate laser across screen when trigger has been activated
-    def fire(self):
-        if self.trigger_state == True:
-
-            if self.host == Player:
-                self.screen.blit(self.sprite, self.bulletcoords[0])
-                self.screen.blit(self.sprite, self.bulletcoords[1])
-                self.bulletcoords[0][1]+= self.velocity
-                self.bulletcoords[1][1]+= self.velocity
-                
-                if self.bulletcoords[0][1] < -30 or self.bulletcoords[1][1] < -30:
-                    self.__update()
-
-            elif self.ship.state == "display":
-                self.screen.blit(self.sprite, self.bulletcoords[0])
-                self.screen.blit(self.sprite, self.bulletcoords[1])
-                self.bulletcoords[0][1]+= self.velocity
-                self.bulletcoords[1][1]+= self.velocity
-                if self.bulletcoords[0][1] > 1000 or self.bulletcoords[1][1] > 1000:
-                    self.__update()
-'''
-
-#Serves as a dynamic list of bullet sets so that you can appropriately spawn in and delete bullet objects
-class Bullets:
-
-    def __init__(self, ship):
-        self.ship = ship
-        self.bullets = []
-    
-    def last(self):
-        return self.bullets[ len(self.bullets) - 1 ]
-    
-    def newBullet(self):
-        self.bullets.append( BulletSet(self.ship, self.ship.screen) )
-
-    def shoot(self):
-        for bullet in self.bullets:
-             self.screen.blit(self.sprite, self.bulletcoords[0])
-             self.screen.blit(self.sprite, self.bulletcoords[1])
-             self.bulletcoords[0][1]+= self.velocity
-             self.bulletcoords[1][1]+= self.velocity
-    
-
-
-
-    
-
-    
-
                     
 #Player object
 class Player(Element):
 
+    shiptype = "Player"
     def __init__(self, sprite, scale, coords, velocity, screen, delta=0):
         
         self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale).convert_alpha()
@@ -159,12 +58,16 @@ class Player(Element):
             
             if event_handler.key == pygame.K_UP: 
                 #shot has been fired
-                if len(self.laser) == 0:
+                if len(self.laser.bullets) == 0:
                     self.laser.newBullet()
                     self.firerate = pygame.time.get_ticks()
                 
-                elif pygame.time.get_ticks() - self.firerate > 1000:
+                elif pygame.time.get_ticks() - self.firerate > 100:
                     self.laser.newBullet()
+                    self.firerate = pygame.time.get_ticks()
+                
+                else:
+                    print("Firerate test")
 
         if event_handler.type == pygame.KEYUP:
 
@@ -190,9 +93,14 @@ class Player(Element):
 
         self.screen.blit(self.sprite, self.getCords())
 
+    def shoot(self):
+         for bullet in self.laser.bullets:
+             bullet.fire()
+
 #Enemy object
 class Enemy(Element):
 
+     shiptype = "Enemy"
      def __init__(self, sprites, scale, screen):
         rand = random.choice(sprites)
         self.sprite = pygame.transform.smoothscale(pygame.image.load(rand), scale).convert_alpha()

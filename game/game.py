@@ -3,10 +3,12 @@ import random
 import sys
 from pygame import mixer
 from explosion import Explosion
+from blueprints import Element
 from blueprints import Enemy
 from blueprints import Player
-from blueprints import Element
-from blueprints import BulletSet
+import bulletsystem
+
+
 
 #Start game
 pygame.init() 
@@ -33,7 +35,7 @@ player_sprites = ["./asset/images/player1.png",
                   "./asset/images/player3.png",
                   "./asset/images/player4.png" ]
 player = Player(player_sprites[3], (100, 100), [450, 625], 20, game)
-greenlaser = BulletSet(player, game)
+
 
 #Initialize aliens or the enemy ships
 alien_sprites = ["./asset/images/enemy1.png",
@@ -42,8 +44,7 @@ alien_sprites = ["./asset/images/enemy1.png",
                  "./asset/images/enemy4.png"]
 alien = Enemy(alien_sprites, (100, 100), game)
 alien2 = Enemy(alien_sprites, (100, 100), game)
-redlaser1 = BulletSet(alien, game)
-redlaser2 = BulletSet(alien2, game)
+
 
 
 
@@ -60,9 +61,6 @@ while rungame:
 
         #Our input scan functions that take in event as the event_handler       
         player.input(event)
-        greenlaser.trigger(event)
-        redlaser1.trigger(event)
-        redlaser2.trigger(event)
         
     bomb.explode()   
     border.spawn(game)
@@ -70,9 +68,8 @@ while rungame:
     player.spawn()
     alien.spawn()
     alien2.spawn()
-    greenlaser.fire()
-    redlaser1.fire()
-    redlaser2.fire()
+    player.shoot()
+    
      
     pygame.display.update()
     
