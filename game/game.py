@@ -45,7 +45,8 @@ alien_sprites = ["./asset/images/enemy1.png",
 alien = Enemy(alien_sprites, (100, 100), game)
 alien2 = Enemy(alien_sprites, (100, 100), game)
 alien3 = Enemy(alien_sprites, (100, 100), game)
-player = Player(player_sprites[3], (100, 100), [450, 625], 40, game, alien)
+enemies = [alien, alien2, alien3]
+player = Player(player_sprites[3], (100, 100), [450, 625], 40, game, enemies)
 
 
 
@@ -68,13 +69,12 @@ while rungame:
     border.spawn(game)
     player.move()
     player.spawn()
-    alien.spawn()
-    alien2.spawn()
-    alien3.spawn()
     player.shoot()
-    alien.autoshoot()
-    alien2.autoshoot()
-    alien3.autoshoot()
+    for enemy in player.target:
+        enemy.spawn()
+        enemy.autoshoot()
+    print(len(player.bullets.bullets))
+        
     pygame.display.update()
     
    

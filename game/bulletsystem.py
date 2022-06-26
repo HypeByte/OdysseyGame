@@ -43,7 +43,9 @@ class BulletSet():
                 self.bulletcoords[0][1]+= self.velocity
                 self.bulletcoords[1][1]+= self.velocity
                 if self.bulletcoords[0][1] < -30 or self.bulletcoords[1][1] < -30:
-                    del self
+                    return True
+                else:
+                    return False
         
         elif self.ship.shiptype == "Enemy":
                 self.screen.blit(self.sprite, self.bulletcoords[0])

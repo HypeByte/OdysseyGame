@@ -94,9 +94,12 @@ class Player(Element):
     
     def shoot(self):
         for bullet in self.bullets.bullets: #Animates the bullets to shoot
-            bullet.fire()
-            if bulletCollide(bullet, self.target):
-                print("yes")
+            if bullet.fire():
+                self.bullets.bullets.remove(bullet)
+            else:
+                for target in self.target:
+                    if bulletCollide(bullet, target):
+                        self.target.remove(target)
         
         if self.addbulletstate == True: #Prepares to add a new bullet
             if len(self.bullets.bullets) == 0:
@@ -107,8 +110,7 @@ class Player(Element):
                 self.bullets.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
-        
-    
+          
 #Enemy object
 class Enemy(Element):
 
