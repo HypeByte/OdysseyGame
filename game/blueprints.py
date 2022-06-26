@@ -7,6 +7,8 @@ from engine import bulletCollide
 from bulletsystem import bullet_map
 from bulletsystem import BulletSet
 from bulletsystem import Bullets 
+import globaldata
+from globaldata import *
 
 
 #Shield mechanic function used to spawn a shield around a sprite object
@@ -94,19 +96,20 @@ class Player(Element):
     
     def shoot(self):
         for bullet in self.bullets.bullets: #Animates the bullets to shoot
-            if bullet.fire():
+            if bullet.fire(None):
                 self.bullets.bullets.remove(bullet)
             else:
                 for target in self.target:
-                    if bulletCollide(bullet, target):
+                    if bulletCollide(bullet, target) and target.state == "display":
                         self.target.remove(target)
+                        self.target.append( Enemy((100,100)) )
         
         if self.addbulletstate == True: #Prepares to add a new bullet
             if len(self.bullets.bullets) == 0:
                 self.bullets.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
-            elif pygame.time.get_ticks() - self.triggertime > 100: #Adds a firerate for firing new bullets
+            elif pygame.time.get_ticks() - self.triggertime > 450: #Adds a firerate for firing new bullets
                 self.bullets.newBullet()
                 self.triggertime = pygame.time.get_ticks()
                 
@@ -115,17 +118,18 @@ class Player(Element):
 class Enemy(Element):
 
      shiptype = "Enemy"
-     def __init__(self, sprites, scale, screen):
-        rand = random.choice(sprites)
+     def __init__(self, scale):
+        self.sprites = enemy_sprites
+        self.screen = game
+        rand = random.choice(self.sprites)
         self.sprite = pygame.transform.smoothscale(pygame.image.load(rand), scale).convert_alpha()
         self.sprite = pygame.transform.rotozoom(self.sprite, 180, 1)
         self.scale = scale
-        self.screen = screen
         self.state = "spawn"
         self.coords = [random.randint(0, 925), -300]
         self.randY = random.choice(range(0, 351, 10))
         self.gunpos = bullet_map[rand]
-        self.enemybullet = BulletSet(self, screen)
+        self.enemybullet = BulletSet(self, self.screen)
 
      #Displays enemy on screen
      def spawn(self):
@@ -142,9 +146,11 @@ class Enemy(Element):
         elif self.state == "display":
             self.screen.blit(self.sprite, ((self.coords[0], self.coords[1])))
     
-     def autoshoot(self):
+     def autoshoot(self, target):
         if self.state == "display":
-            self.enemybullet.fire()
+            self.enemybullet.fire(target)
+    
+
                
         
 

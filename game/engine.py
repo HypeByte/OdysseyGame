@@ -1,5 +1,6 @@
 import pygame
 import bulletsystem
+import globaldata
 import sys
 import os
 

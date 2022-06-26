@@ -7,6 +7,8 @@ from blueprints import Element
 from blueprints import Enemy
 from blueprints import Player
 import bulletsystem
+import globaldata
+from globaldata import *
 
 
 
@@ -38,15 +40,14 @@ player_sprites = ["./asset/images/player1.png",
 
 
 #Initialize aliens or the enemy ships
-alien_sprites = ["./asset/images/enemy1.png",
-                 "./asset/images/enemy2.png",
-                 "./asset/images/enemy3.png",
-                 "./asset/images/enemy4.png"]
-alien = Enemy(alien_sprites, (100, 100), game)
-alien2 = Enemy(alien_sprites, (100, 100), game)
-alien3 = Enemy(alien_sprites, (100, 100), game)
+alien = Enemy((100, 100))
+alien2 = Enemy((100, 100))
+alien3 = Enemy((100, 100))
 enemies = [alien, alien2, alien3]
 player = Player(player_sprites[3], (100, 100), [450, 625], 40, game, enemies)
+alien.target = player
+alien2.target = player
+alien3.target = player
 
 
 
@@ -55,6 +56,7 @@ player = Player(player_sprites[3], (100, 100), [450, 625], 40, game, enemies)
 #game loop
 while rungame:
     clock.tick(20) #Caps the fps to 30 so that there is no fps lag or display lag
+    print(clock.get_fps())
     background.spawn(game)
 
     #Input scan loop   
@@ -72,9 +74,8 @@ while rungame:
     player.shoot()
     for enemy in player.target:
         enemy.spawn()
-        enemy.autoshoot()
-    print(len(player.bullets.bullets))
-        
+        enemy.autoshoot(player)
+       
     pygame.display.update()
     
    

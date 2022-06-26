@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+from engine import bulletCollide
 
 #A dictionary that maps differet ship file to a transformation tuple, which transforms ship coordinates to get appropriate coordinates of bullets for each different ship
 bullet_map = {
@@ -26,7 +27,7 @@ class BulletSet():
              self.sprite = pygame.image.load("./asset/images/greenlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
              self.bulletcoords = [ [self.x + ship.gunpos[0], 625], [self.x +  ship.gunpos[1], 625] ]
-             self.velocity = -18
+             self.velocity = -36
             
         elif ship.shiptype == "Enemy":
              self.sprite = pygame.image.load("./asset/images/redlaser.png")
@@ -36,7 +37,7 @@ class BulletSet():
              self.nextfire = False
         self.screen = screen
     
-    def fire(self): #displays bullet and updates its positions to be displayed next time
+    def fire(self, target): #displays bullet and updates its positions to be displayed next time
         if self.ship.shiptype == "Player":
                 self.screen.blit(self.sprite, self.bulletcoords[0])
                 self.screen.blit(self.sprite, self.bulletcoords[1])
@@ -52,7 +53,7 @@ class BulletSet():
                 self.screen.blit(self.sprite, self.bulletcoords[1])
                 self.bulletcoords[0][1]+= self.velocity
                 self.bulletcoords[1][1]+= self.velocity
-                if self.bulletcoords[0][1] > 750 or self.bulletcoords[1][1] > 750:
+                if self.bulletcoords[0][1] > 750 or self.bulletcoords[1][1] > 750 or bulletCollide(self, target):
                     self.bulletcoords[1][1] = self.ship.randY + 75
                     self.bulletcoords[0][1] = self.ship.randY + 75
                 
