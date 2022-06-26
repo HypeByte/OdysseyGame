@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 import bulletsystem
+import engine
+from engine import bulletCollide
 from bulletsystem import bullet_map
 from bulletsystem import BulletSet
 from bulletsystem import Bullets 
@@ -31,13 +33,14 @@ class Element:
 class Player(Element):
 
     shiptype = "Player"
-    def __init__(self, sprite, scale, coords, velocity, screen, delta=0):
+    def __init__(self, sprite, scale, coords, velocity, screen, target, delta=0):
         self.sprite = pygame.transform.smoothscale((pygame.image.load(sprite)), scale).convert_alpha()
         self.scale = scale
         self.coords = coords
         self.velocity = velocity
         self.delta = delta 
         self.screen = screen
+        self.target = target
         self.gunpos = bullet_map[sprite]
         self.bullets = Bullets(self)
         self.triggertime = 0
@@ -92,6 +95,8 @@ class Player(Element):
     def shoot(self):
         for bullet in self.bullets.bullets: #Animates the bullets to shoot
             bullet.fire()
+            if bulletCollide(bullet, self.target):
+                print("yes")
         
         if self.addbulletstate == True: #Prepares to add a new bullet
             if len(self.bullets.bullets) == 0:
