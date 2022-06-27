@@ -56,23 +56,23 @@ class Player(Element):
     
         if event_handler.type == pygame.KEYDOWN:
 
-            if event_handler.key == pygame.K_LEFT:
+            if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_a:
                 #Move left
                 self.delta = -self.velocity
 
-            if event_handler.key == pygame.K_RIGHT:
+            if event_handler.key == pygame.K_RIGHT or event_handler.key == pygame.K_d:
                 #Move right
                 self.delta = self.velocity
             
-            if event_handler.key == pygame.K_UP: #Checks if the up arrow has been pressed
+            if event_handler.key == pygame.K_UP or event_handler.key == pygame.K_w: #Checks if the up arrow has been pressed
                 self.addbulletstate = True #makes add bullet state true, meaning that it is possible to append a new bullet
                
         if event_handler.type == pygame.KEYUP: 
 
-            if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT:
+            if event_handler.key == pygame.K_LEFT or event_handler.key == pygame.K_RIGHT or event_handler.key == pygame.K_a or event_handler.key == pygame.K_d:
                 self.delta = 0
 
-            if event_handler.key == pygame.K_UP:
+            if event_handler.key == pygame.K_UP or event_handler.key == pygame.K_w:
                 self.addbulletstate = False #If the up arrow is released make the add bullet state false
             
             
