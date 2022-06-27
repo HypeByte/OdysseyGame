@@ -14,3 +14,7 @@ def mouseCollide(x, y, button):
 
     if x > button.coords[0] and x < button.coords[0] + button.scale[0] and y > button.coords[1] and y < button.coords[1] + button.scale[1]:
         return True
+
+def displayText(text, font, screen, x, y, color):
+    display = font.render(text, True, color)
+    screen.blit(display, (x, y))

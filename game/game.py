@@ -7,6 +7,7 @@ from blueprints import Enemy
 from blueprints import Player
 from blueprints import engine
 from engine import mouseCollide
+from engine import displayText
 import bulletsystem
 import globaldata
 from globaldata import *
@@ -81,9 +82,6 @@ def charactergui():
                     gamegui(3)
 
 
-                
-            
-
         opt1.spawn(characterscreen)
         opt2.spawn(characterscreen)
         opt3.spawn(characterscreen)
@@ -93,7 +91,7 @@ def charactergui():
 
 
 def gamegui(option):
-        #Make game window called game
+    #Make game window called game
     game = pygame.display.set_mode((1000,800))
     pygame.display.set_caption("Odyssey")
     icon = pygame.image.load("./asset/images/gameicon.png")
@@ -102,6 +100,7 @@ def gamegui(option):
 
     #Making the space border
     border = Element("./asset/images/border.png", (1150, 150), (-50, 650))
+    font = pygame.font.Font("./asset/fonts/Transformers.ttf", 32)
 
     #Make game background
     background = Element("./asset/images/background.jpg", (1000, 800), (0,0))
@@ -145,7 +144,9 @@ def gamegui(option):
         for enemy in player.target:
             enemy.spawn()
             enemy.autoshoot(player)
-        
+
+        displayText("Score: " + str(player.score), font, game, 30, 760, (126, 187, 222))
+        displayText("Health: " + str(player.health), font, game, 300, 760, (245, 76, 79))
         pygame.display.update()
 
 menugui()

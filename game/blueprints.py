@@ -50,6 +50,8 @@ class Player(Element):
         self.explosions = []
         self.triggertime = 0
         self.addbulletstate = False
+        self.score = 0
+        self.health = 10
 
     #Detects if arrow keys are pressed, then appropriately changes the delta value which is the the change in x pos for the player so that the player can move
     def input(self, event_handler):
@@ -110,9 +112,11 @@ class Player(Element):
             else:
                 for target in self.target:
                     if bulletCollide(bullet, target) and target.state == "display":
+                        self.score+=1
                         self.target.remove(target)
                         self.target.append( Enemy((100,100)) )
                         self.explosions.append( Explosion(self.screen, [target.coords[0] - 75, target.coords[1]], (250, 250)) )
+                        
         
         if self.addbulletstate == True: #Prepares to add a new bullet
             if len(self.bullets.bullets) == 0:
@@ -126,7 +130,6 @@ class Player(Element):
           
 #Enemy object
 class Enemy(Element):
-
      shiptype = "Enemy"
      def __init__(self, scale):
         self.sprites = enemy_sprites
@@ -159,7 +162,7 @@ class Enemy(Element):
      def autoshoot(self, target):
         if self.state == "display":
             self.enemybullet.fire(target)
-    
+        
 
                
         

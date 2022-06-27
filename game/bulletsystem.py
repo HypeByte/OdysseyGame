@@ -53,9 +53,15 @@ class BulletSet():
                 self.screen.blit(self.sprite, self.bulletcoords[1])
                 self.bulletcoords[0][1]+= self.velocity
                 self.bulletcoords[1][1]+= self.velocity
-                if self.bulletcoords[0][1] > 750 or self.bulletcoords[1][1] > 750 or bulletCollide(self, target):
+                if bulletCollide(self, target):
                     self.bulletcoords[1][1] = self.ship.randY + 75
                     self.bulletcoords[0][1] = self.ship.randY + 75
+
+                elif self.bulletcoords[0][1] > 750 or self.bulletcoords[1][1] > 750:
+                    self.bulletcoords[1][1] = self.ship.randY + 75
+                    self.bulletcoords[0][1] = self.ship.randY + 75
+                    target.health-=1
+                    
                 
             
 
