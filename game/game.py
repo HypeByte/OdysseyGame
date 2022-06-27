@@ -44,7 +44,7 @@ alien = Enemy((100, 100))
 alien2 = Enemy((100, 100))
 alien3 = Enemy((100, 100))
 enemies = [alien, alien2, alien3]
-player = Player(player_sprites[3], (100, 100), [450, 625], 40, game, enemies)
+player = Player(player_sprites[3], (100, 100), [450, 625], 70, game, enemies)
 alien.target = player
 alien2.target = player
 alien3.target = player
@@ -56,7 +56,6 @@ alien3.target = player
 #game loop
 while rungame:
     clock.tick(20) #Caps the fps to 30 so that there is no fps lag or display lag
-    print(clock.get_fps())
     background.spawn(game)
 
     #Input scan loop   

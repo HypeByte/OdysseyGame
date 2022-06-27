@@ -3,6 +3,8 @@ import sys
 import random
 import bulletsystem
 import engine
+import explosion
+from explosion import *
 from engine import bulletCollide
 from bulletsystem import bullet_map
 from bulletsystem import BulletSet
@@ -45,6 +47,7 @@ class Player(Element):
         self.target = target
         self.gunpos = bullet_map[sprite]
         self.bullets = Bullets(self)
+        self.explosions = []
         self.triggertime = 0
         self.addbulletstate = False
 
@@ -92,6 +95,12 @@ class Player(Element):
 
         self.screen.blit(self.sprite, self.getCords())
         spawnShield(self, self.screen)
+        for explosion in self.explosions:
+            if explosion.state == False:
+                self.explosions.remove(explosion)
+            else:
+                explosion.explode()
+                explosion.update()
 
     
     def shoot(self):
@@ -103,6 +112,7 @@ class Player(Element):
                     if bulletCollide(bullet, target) and target.state == "display":
                         self.target.remove(target)
                         self.target.append( Enemy((100,100)) )
+                        self.explosions.append( Explosion(self.screen, [target.coords[0] - 75, target.coords[1]], (250, 250)) )
         
         if self.addbulletstate == True: #Prepares to add a new bullet
             if len(self.bullets.bullets) == 0:
@@ -127,7 +137,7 @@ class Enemy(Element):
         self.scale = scale
         self.state = "spawn"
         self.coords = [random.randint(0, 925), -300]
-        self.randY = random.choice(range(0, 351, 10))
+        self.randY = random.choice(range(0, 351, 25))
         self.gunpos = bullet_map[rand]
         self.enemybullet = BulletSet(self, self.screen)
 
@@ -136,7 +146,7 @@ class Enemy(Element):
         if self.state == "spawn":
 
             if self.coords[1] < self.randY:
-                self.coords[1]+= 10
+                self.coords[1]+= 25
                 self.screen.blit(self.sprite, (self.coords[0], self.coords[1]))
                 spawnShield(self, self.screen)
             elif self.coords[1] == self.randY:
