@@ -33,10 +33,11 @@ def menugui():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #Exit window of x button is pressed
                 runmenu = False
+                sys.exit()
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseCollide(mouseX, mouseY, play_button):
-                    gamegui()
+                    charactergui()
                     runmenu = False
 
         play_button.spawn(menu)
@@ -45,7 +46,53 @@ def menugui():
         pygame.display.update()
 
 
-def gamegui():
+def charactergui():
+    characterscreen = pygame.display.set_mode((1000, 800))
+    pygame.display.set_caption("Characters Screen")
+    characterscreen_background = Element("./asset/images/characterscreen.jpg", (1000, 800), (0, 0))
+    opt1 = Element("./asset/images/player1.png", (150, 150), (50, 400))
+    opt2 = Element("./asset/images/player2.png", (150, 150), (295, 400))
+    opt3 = Element("./asset/images/player3.png", (150, 150), (535, 400))
+    opt4 = Element("./asset/images/player4.png", (150, 150), (790, 400))
+    runcharscreen = True
+
+    while runcharscreen:
+        characterscreen_background.spawn(characterscreen)
+        mouseX, mouseY = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: #Exit window of x button is pressed
+                runcharscreen = False
+                sys.exit()
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+
+                if mouseCollide(mouseX, mouseY, opt1):
+                    runcharscreen = False
+                    gamegui(0)
+                elif mouseCollide(mouseX, mouseY, opt2):
+                    runcharscreen = False
+                    gamegui(1)
+                elif mouseCollide(mouseX, mouseY, opt3):
+                    runcharscreen = False
+                    gamegui(2)
+                elif mouseCollide(mouseX, mouseY, opt4):
+                    runcharscreen = False
+                    gamegui(3)
+
+
+                
+            
+
+        opt1.spawn(characterscreen)
+        opt2.spawn(characterscreen)
+        opt3.spawn(characterscreen)
+        opt4.spawn(characterscreen)
+        pygame.display.update()
+    
+
+
+def gamegui(option):
         #Make game window called game
     game = pygame.display.set_mode((1000,800))
     pygame.display.set_caption("Odyssey")
@@ -72,7 +119,7 @@ def gamegui():
     alien2 = Enemy((100, 100))
     alien3 = Enemy((100, 100))
     enemies = [alien, alien2, alien3]
-    player = Player(player_sprites[3], (100, 100), [450, 625], 70, game, enemies)
+    player = Player(player_sprites[option], (100, 100), [450, 625], 70, game, enemies)
     alien.target = player
     alien2.target = player
     alien3.target = player
@@ -85,6 +132,7 @@ def gamegui():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #Exit window of x button is pressed
                 rungame = False
+                sys.exit()
         
             #Our input scan functions that take in event as the event_handler       
             player.input(event)
