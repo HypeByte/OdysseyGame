@@ -18,7 +18,15 @@ from globaldata import *
 pygame.init() 
 clock = pygame.time.Clock()
 
+try:
+    with open("./asset/userdata.txt") as data:
+        user_data = json.load(data)
+except:
+    with open("./asset/userdata.txt", 'w') as data:
+        json.dump(user_data, data)
+
 def menugui():
+ 
     menu = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("Odyssy Menu")
     menu_background = Element("./asset/images/menu.png", Screen_size, origin)
@@ -38,7 +46,15 @@ def menugui():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseCollide(mouseX, mouseY, play_button):
-                    charactergui()
+                    charactergui("menu")
+                    runmenu = False
+                
+                if mouseCollide(mouseX, mouseY, controls_button):
+                    guidegui()
+                    runmenu = False
+                
+                if mouseCollide(mouseX, mouseY, profile_button):
+                    profilegui()
                     runmenu = False
 
         play_button.spawn(menu)
@@ -46,8 +62,63 @@ def menugui():
         profile_button.spawn(menu)
         pygame.display.update()
 
+def guidegui():
+    guidescreen = pygame.display.set_mode(Screen_size)
+    pygame.display.set_caption("How to play")
+    guidebackground = Element("./asset/images/guidescreen.jpg", (1000, 800), (0, 0))
+    backbutton = Element("./asset/images/backbutton.png", (100, 100), (0,0))
+    runguide = True
 
-def charactergui():
+    while runguide:
+        guidebackground.spawn(guidescreen)
+        mouseX, mouseY = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: #Exit window of x button is pressed
+                runguide = False
+                sys.exit()
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if mouseCollide(mouseX, mouseY, backbutton):
+                    menugui()
+                    runguide = False
+
+        backbutton.spawn(guidescreen)
+        pygame.display.update()
+
+def profilegui():
+    profilescreen = pygame.display.set_mode(Screen_size)
+    pygame.display.set_caption("Your Profile")
+    profilebackground = Element("./asset/images/profilescreen.png", (1000, 800), origin)
+    backbutton = Element("./asset/images/backbutton.png", (100, 100), (0,0))
+    font = pygame.font.Font("./asset/fonts/Transformers.ttf", 72)
+    runprofile = True
+
+    while runprofile:
+        profilebackground.spawn(profilescreen)
+        mouseX, mouseY = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: #Exit window of x button is pressed
+                runprofile = False
+                sys.exit()
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if mouseCollide(mouseX, mouseY, backbutton):
+                    menugui()
+                    runcharscreen = False
+                        
+        displayText("Highest Score: " + str(user_data["highscore"]), font, profilescreen, 200, 250, (255,255,255))               
+        backbutton.spawn(profilescreen)
+        pygame.display.update()
+
+
+
+
+
+
+
+def charactergui(previous):
     characterscreen = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("Characters Screen")
     characterscreen_background = Element("./asset/images/characterscreen.jpg", Screen_size, origin)
@@ -55,6 +126,7 @@ def charactergui():
     opt2 = Element("./asset/images/player2.png", (150, 150), (295, 400))
     opt3 = Element("./asset/images/player3.png", (150, 150), (535, 400))
     opt4 = Element("./asset/images/player4.png", (150, 150), (790, 400))
+    backbutton = Element("./asset/images/backbutton.png", (100, 100), (0,0))
     runcharscreen = True
 
     while runcharscreen:
@@ -67,7 +139,13 @@ def charactergui():
                 sys.exit()
             
             if event.type == pygame.MOUSEBUTTONDOWN:
-
+                
+                if mouseCollide(mouseX, mouseY, backbutton):
+                    runcharscreen = False
+                    if previous == "menu":
+                        menugui()
+                    elif previous == "loss":
+                        losegui()
                 if mouseCollide(mouseX, mouseY, opt1):
                     runcharscreen = False
                     gamegui(0)
@@ -81,21 +159,29 @@ def charactergui():
                     runcharscreen = False
                     gamegui(3)
 
-
+        backbutton.spawn(characterscreen)
         opt1.spawn(characterscreen)
         opt2.spawn(characterscreen)
         opt3.spawn(characterscreen)
         opt4.spawn(characterscreen)
         pygame.display.update()
-    
-def losegui():
+
+def highscoregui():
+    highscorescreen = pygame.display.set_mode(Screen_size)
+    pygame.display.set_caption("Highscore!")
+    highscorebackground = Element("./asset/images/highscore.jpg", Screen_size, origin)
+    menubutton = Element("./asset/images/menubutton.png", (185, 185), (125, 600))
+    screenshotbutton = Element("./asset/images/screenshot.png", (185, 185), (375, 600))
+    redobutton = Element("./asset/images/redobutton.png", (185, 185), (625, 600))
+
+def losegui(score):
     losingscreen = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("You Lost!")
     losingbackground = Element("./asset/images/losingscreen.jpg", Screen_size, origin)
     runlose = True
-
-    menubutton = Element("./asset/images/menubutton.png", (185, 185), (300, 300))
-    redobutton = Element("./asset/images/redobutton.png", (185, 185), (515, 300))
+    font = pygame.font.Font("./asset/fonts/Transformers.ttf", 100)
+    menubutton = Element("./asset/images/menubutton.png", (185, 185), (300, 500))
+    redobutton = Element("./asset/images/redobutton.png", (185, 185), (515, 500))
 
     while runlose:
         losingbackground.spawn(losingscreen)
@@ -111,11 +197,13 @@ def losegui():
                     runlose = False
                 
                 elif mouseCollide(mouseX, mouseY, redobutton):
-                    charactergui()
+                    charactergui("loss")
                     runlose = False
             
         menubutton.spawn(losingscreen)   
         redobutton.spawn(losingscreen)
+        displayText("Your Score: " + str(score), font, losingscreen, 200, 300, (224, 63, 74))
+        displayText("High Score: " + str(user_data["highscore"]), font, losingscreen, 200, 425, (227, 190, 57))
         pygame.display.update()
 
 
@@ -171,6 +259,10 @@ def gamegui(option):
         #Input scan loop   
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #Exit window of x button is pressed
+                if player.score > user_data["highscore"]:
+                    user_data["highscore"] = player.score
+                    with open("./asset/userdata.txt", 'w') as data:
+                        json.dump(user_data, data)
                 rungame = False
                 sys.exit()
         
@@ -198,7 +290,11 @@ def gamegui(option):
                     explosion.explode()
                     explosion.update(speed=.1)
                     pygame.display.update()
-            losegui()
+            if player.score > user_data["highscore"]:
+                    user_data["highscore"] = player.score
+                    with open("./asset/userdata.txt", 'w') as data:
+                        json.dump(user_data, data)
+            losegui(player.score)
             rungame = False
 
         pygame.display.update()

@@ -1,4 +1,5 @@
 import pygame
+import json
 
 game = pygame.display.set_mode((1000,800))
 
@@ -14,3 +15,9 @@ player_sprites = ["./asset/images/player1.png",
 
 Screen_size = (1000, 800)
 origin = (0, 0)
+
+user_data = {
+    "highscore" : '0'
+}  
+
+
