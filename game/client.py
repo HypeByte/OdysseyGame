@@ -155,9 +155,9 @@ def gamegui(option):
 
 
     #Initialize aliens or the enemy ships
-    alien = Enemy((100, 100))
-    alien2 = Enemy((100, 100))
-    alien3 = Enemy((100, 100))
+    alien = Enemy((100, 100), 10, 12)
+    alien2 = Enemy((100, 100), 10, 12)
+    alien3 = Enemy((100, 100), 10, 12)
     enemies = [alien, alien2, alien3]
     player = Player(player_sprites[option], (100, 100), [450, 625], 70, game, enemies)
     alien.target = player
@@ -182,6 +182,9 @@ def gamegui(option):
         player.move()
         player.spawn()
         player.shoot()
+
+        
+
         for enemy in player.target:
             enemy.spawn()
             enemy.autoshoot(player)

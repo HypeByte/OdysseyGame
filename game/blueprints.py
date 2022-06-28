@@ -114,7 +114,15 @@ class Player(Element):
                     if bulletCollide(bullet, target) and target.state == "display":
                         self.score+=1
                         self.target.remove(target)
-                        self.target.append( Enemy((100,100)) )
+                        if self.score >= 0 and self.score <= 10:
+                            self.target.append( Enemy((100,100), 10, 12) )
+                        elif self.score > 10 and self.score <= 20:
+                            self.target.append( Enemy((100,100), 14, 15) )
+                        elif self.score > 20 and self.score <= 30:
+                            self.target.append( Enemy((100,100), 25, 18) )
+                        elif self.score > 30:
+                            self.target.append( Enemy((100,100), 35, 24) )
+                            self.velocity = 95
                         self.explosions.append( Explosion(self.screen, [target.coords[0] - 75, target.coords[1]], (250, 250)) )
                         
         
@@ -131,7 +139,7 @@ class Player(Element):
 #Enemy object
 class Enemy(Element):
      shiptype = "Enemy"
-     def __init__(self, scale):
+     def __init__(self, scale, spawnspeed, bulletspeed):
         self.sprites = enemy_sprites
         self.screen = game
         rand = random.choice(self.sprites)
@@ -139,8 +147,10 @@ class Enemy(Element):
         self.sprite = pygame.transform.rotozoom(self.sprite, 180, 1)
         self.scale = scale
         self.state = "spawn"
+        self.spawnspeed = spawnspeed
+        self.bulletspeed = bulletspeed
         self.coords = [random.randint(0, 925), -300]
-        self.randY = random.choice(range(0, 351, 25))
+        self.randY = random.choice(range(self.spawnspeed, 351, self.spawnspeed))
         self.gunpos = bullet_map[rand]
         self.enemybullet = BulletSet(self, self.screen)
 
@@ -149,10 +159,11 @@ class Enemy(Element):
         if self.state == "spawn":
 
             if self.coords[1] < self.randY:
-                self.coords[1]+= 25
+                self.coords[1]+= self.spawnspeed
                 self.screen.blit(self.sprite, (self.coords[0], self.coords[1]))
                 spawnShield(self, self.screen)
-            elif self.coords[1] == self.randY:
+
+            elif self.coords[1] >= self.randY:
                 self.state = "display"
                 
 
@@ -161,7 +172,7 @@ class Enemy(Element):
     
      def autoshoot(self, target):
         if self.state == "display":
-            self.enemybullet.fire(target)
+            self.enemybullet.fire(target, self.bulletspeed)
         
 
                

@@ -27,22 +27,20 @@ class BulletSet():
              self.sprite = pygame.image.load("./asset/images/greenlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
              self.bulletcoords = [ [self.x + ship.gunpos[0], 625], [self.x +  ship.gunpos[1], 625] ]
-             self.velocity = -36
             
         elif ship.shiptype == "Enemy":
              self.sprite = pygame.image.load("./asset/images/redlaser.png")
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
              self.bulletcoords = [ [self.x + ship.gunpos[0], ship.randY + 75], [self.x + ship.gunpos[1], ship.randY + 75] ]
-             self.velocity = 18
              self.nextfire = False
         self.screen = screen
     
-    def fire(self, target): #displays bullet and updates its positions to be displayed next time
+    def fire(self, target, bulletspeed=-36): #displays bullet and updates its positions to be displayed next time
         if self.ship.shiptype == "Player":
                 self.screen.blit(self.sprite, self.bulletcoords[0])
                 self.screen.blit(self.sprite, self.bulletcoords[1])
-                self.bulletcoords[0][1]+= self.velocity
-                self.bulletcoords[1][1]+= self.velocity
+                self.bulletcoords[0][1]+= bulletspeed
+                self.bulletcoords[1][1]+= bulletspeed
                 if self.bulletcoords[0][1] < -30 or self.bulletcoords[1][1] < -30:
                     return True
                 else:
@@ -51,8 +49,8 @@ class BulletSet():
         elif self.ship.shiptype == "Enemy":
                 self.screen.blit(self.sprite, self.bulletcoords[0])
                 self.screen.blit(self.sprite, self.bulletcoords[1])
-                self.bulletcoords[0][1]+= self.velocity
-                self.bulletcoords[1][1]+= self.velocity
+                self.bulletcoords[0][1]+= bulletspeed
+                self.bulletcoords[1][1]+= bulletspeed
                 if bulletCollide(self, target):
                     self.bulletcoords[1][1] = self.ship.randY + 75
                     self.bulletcoords[0][1] = self.ship.randY + 75
