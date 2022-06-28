@@ -1,1 +1,1 @@
-{"highscore": 53}
+{"highscore": 0}
