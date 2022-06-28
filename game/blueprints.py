@@ -12,7 +12,8 @@ from bulletsystem import Bullets
 import globaldata
 from globaldata import *
 from pygame import mixer
-
+pygame.init() 
+pygame.mixer.pre_init()
 playerfiresound = pygame.mixer.Sound("./asset/sound/playershoot.mp3")
 explosionsound = pygame.mixer.Sound("./asset/sound/explosion.flac")
 spawnsound = pygame.mixer.Sound("./asset/sound/spawnsound.wav")

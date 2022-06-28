@@ -1,7 +1,6 @@
 import pygame
 import os
 import sys
-from pygame import mixer
 
 
 

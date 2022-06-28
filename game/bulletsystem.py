@@ -1,8 +1,10 @@
 import pygame
+from pygame import mixer as mixer 
 import sys
 import random
 from engine import bulletCollide
-
+pygame.init() 
+pygame.mixer.pre_init()
 #A dictionary that maps differet ship file to a transformation tuple, which transforms ship coordinates to get appropriate coordinates of bullets for each different ship
 bullet_map = {
 
@@ -49,7 +51,7 @@ class BulletSet():
         
         elif self.ship.shiptype == "Enemy":
                 while self.soundrep == 0:
-                    enemyfiresound()
+                    enemyfiresound.play()
                     self.soundrep+=1
                 self.screen.blit(self.sprite, self.bulletcoords[0])
                 self.screen.blit(self.sprite, self.bulletcoords[1])
