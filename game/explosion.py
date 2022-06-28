@@ -1,6 +1,9 @@
 import pygame
 import os
 import sys
+from pygame import mixer
+
+
 
 #Loading in all the sprites of the explosion for our animation frames
 explosion1 = pygame.image.load("./asset/images/explosion/explosion1.png")

@@ -11,13 +11,14 @@ from engine import displayText
 import bulletsystem
 import globaldata
 from globaldata import *
+from pygame import mixer
 
 
 
 #Start game
 pygame.init() 
+pygame.mixer.pre_init()
 clock = pygame.time.Clock()
-
 try:
     with open("./asset/userdata.txt") as data:
         user_data = json.load(data)
@@ -25,16 +26,20 @@ except:
     with open("./asset/userdata.txt", 'w') as data:
         json.dump(user_data, data)
 
+
+buttonclicksound = pygame.mixer.Sound("./asset/sound/buttonclick.mp3")
+screenshotsound = pygame.mixer.Sound("./asset/sound/screenshot.wav")
 def menugui():
  
     menu = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("Odyssy Menu")
+    icon = pygame.image.load("./asset/images/gameicon.png")
+    pygame.display.set_icon(icon)
     menu_background = Element("./asset/images/menu.png", Screen_size, origin)
     play_button = Element("./asset/images/playbutton.png", (185, 185), (125, 475))
     controls_button = Element("./asset/images/controls.png", (185, 185), (375, 475))
     profile_button = Element("./asset/images/profile.png", (185, 185), (625, 475))
     runmenu = True
-
     while runmenu:
         menu_background.spawn(menu)
         mouseX, mouseY = pygame.mouse.get_pos()
@@ -46,14 +51,17 @@ def menugui():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseCollide(mouseX, mouseY, play_button):
+                    buttonclicksound.play()
                     charactergui("menu")
                     runmenu = False
                 
                 if mouseCollide(mouseX, mouseY, controls_button):
+                    buttonclicksound.play()
                     guidegui()
                     runmenu = False
                 
                 if mouseCollide(mouseX, mouseY, profile_button):
+                    buttonclicksound.play()
                     profilegui()
                     runmenu = False
 
@@ -65,6 +73,8 @@ def menugui():
 def guidegui():
     guidescreen = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("How to play")
+    icon = pygame.image.load("./asset/images/gameicon.png")
+    pygame.display.set_icon(icon)
     guidebackground = Element("./asset/images/guidescreen.jpg", (1000, 800), (0, 0))
     backbutton = Element("./asset/images/backbutton.png", (100, 100), (0,0))
     runguide = True
@@ -80,6 +90,7 @@ def guidegui():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseCollide(mouseX, mouseY, backbutton):
+                    buttonclicksound.play()
                     menugui()
                     runguide = False
 
@@ -105,6 +116,7 @@ def profilegui():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseCollide(mouseX, mouseY, backbutton):
+                    buttonclicksound.play()
                     menugui()
                     runcharscreen = False
                         
@@ -121,6 +133,8 @@ def profilegui():
 def charactergui(previous):
     characterscreen = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("Characters Screen")
+    icon = pygame.image.load("./asset/images/gameicon.png")
+    pygame.display.set_icon(icon)
     characterscreen_background = Element("./asset/images/characterscreen.jpg", Screen_size, origin)
     opt1 = Element("./asset/images/player1.png", (150, 150), (50, 400))
     opt2 = Element("./asset/images/player2.png", (150, 150), (295, 400))
@@ -142,20 +156,25 @@ def charactergui(previous):
                 
                 if mouseCollide(mouseX, mouseY, backbutton):
                     runcharscreen = False
+                    buttonclicksound.play()
                     if previous == "menu":
                         menugui()
                     elif previous == "loss":
                         losegui()
                 if mouseCollide(mouseX, mouseY, opt1):
+                    buttonclicksound.play()
                     runcharscreen = False
                     gamegui(0)
                 elif mouseCollide(mouseX, mouseY, opt2):
+                    buttonclicksound.play()
                     runcharscreen = False
                     gamegui(1)
                 elif mouseCollide(mouseX, mouseY, opt3):
+                    buttonclicksound.play()
                     runcharscreen = False
                     gamegui(2)
                 elif mouseCollide(mouseX, mouseY, opt4):
+                    buttonclicksound.play()
                     runcharscreen = False
                     gamegui(3)
 
@@ -169,14 +188,49 @@ def charactergui(previous):
 def highscoregui():
     highscorescreen = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("Highscore!")
+    icon = pygame.image.load("./asset/images/gameicon.png")
+    pygame.display.set_icon(icon)
     highscorebackground = Element("./asset/images/highscore.jpg", Screen_size, origin)
     menubutton = Element("./asset/images/menubutton.png", (185, 185), (125, 600))
     screenshotbutton = Element("./asset/images/screenshot.png", (185, 185), (375, 600))
     redobutton = Element("./asset/images/redobutton.png", (185, 185), (625, 600))
+    font = pygame.font.Font("./asset/fonts/Transformers.ttf", 82)
+    runhsgui = True
+
+    while runhsgui:
+        highscorebackground.spawn(highscorescreen)
+        displayText("High Score: " + str(user_data["highscore"]), font, highscorescreen, 200, 425, (227, 190, 57))
+        mouseX, mouseY = pygame.mouse.get_pos()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: #Exit window of x button is pressed
+                runhsgui = False
+                pygame.quit()
+                sys.exit()
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if mouseCollide(mouseX, mouseY, menubutton):
+                    buttonclicksound.play()
+                    menugui()
+                    runhsgui = False
+                elif mouseCollide(mouseX, mouseY, redobutton):
+                    buttonclicksound.play()
+                    charactergui()
+                    runhsgui = False
+                elif mouseCollide(mouseX, mouseY, screenshotbutton):
+                    screenshotsound.play()
+                    pygame.image.save(highscorescreen, "highscore.jpeg")
+        
+       
+        menubutton.spawn(highscorescreen)
+        screenshotbutton.spawn(highscorescreen)
+        redobutton.spawn(highscorescreen)
+        pygame.display.update()
 
 def losegui(score):
     losingscreen = pygame.display.set_mode(Screen_size)
     pygame.display.set_caption("You Lost!")
+    icon = pygame.image.load("./asset/images/gameicon.png")
+    pygame.display.set_icon(icon)
     losingbackground = Element("./asset/images/losingscreen.jpg", Screen_size, origin)
     runlose = True
     font = pygame.font.Font("./asset/fonts/Transformers.ttf", 100)
@@ -193,10 +247,12 @@ def losegui(score):
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if mouseCollide(mouseX, mouseY, menubutton):
+                    buttonclicksound.play()
                     menugui()
                     runlose = False
                 
                 elif mouseCollide(mouseX, mouseY, redobutton):
+                    buttonclicksound.play()
                     charactergui("loss")
                     runlose = False
             
@@ -210,6 +266,8 @@ def losegui(score):
 
 def gamegui(option):
     #Make game window called game
+    mixer.music.load("./asset/sound/background.mp3")
+    mixer.music.play(-1)
     game = pygame.display.set_mode((1000,800))
     pygame.display.set_caption("Odyssey")
     icon = pygame.image.load("./asset/images/gameicon.png")
@@ -259,7 +317,7 @@ def gamegui(option):
         #Input scan loop   
         for event in pygame.event.get():
             if event.type == pygame.QUIT: #Exit window of x button is pressed
-                if player.score > user_data["highscore"]:
+                if int(player.score) > int(user_data["highscore"]):
                     user_data["highscore"] = player.score
                     with open("./asset/userdata.txt", 'w') as data:
                         json.dump(user_data, data)
@@ -285,17 +343,21 @@ def gamegui(option):
         displayText("Health: " + str(player.health), font, game, 300, 760, (245, 76, 79))
 
         if player.health == 0:
+            mixer.music.stop()
             while base_explosions[len(base_explosions) - 1].state:
                 for explosion in base_explosions:
                     explosion.explode()
                     explosion.update(speed=.1)
                     pygame.display.update()
-            if player.score > user_data["highscore"]:
+            if player.score > int(user_data["highscore"]):
                     user_data["highscore"] = player.score
                     with open("./asset/userdata.txt", 'w') as data:
                         json.dump(user_data, data)
-            losegui(player.score)
-            rungame = False
+                    highscoregui()
+                    rungame = False
+            else:
+                losegui(player.score)
+                rungame = False
 
         pygame.display.update()
 

@@ -16,7 +16,7 @@ bullet_map = {
     "./asset/images/enemy4.png" : (15, 70)
 
 }
-
+enemyfiresound = pygame.mixer.Sound("./asset/sound/enemyshoot.mp3")
 #Iniitializes a pair of lasers/bullets based on the ship you are attaching them on
 class BulletSet():
 
@@ -33,6 +33,7 @@ class BulletSet():
              self.sprite = pygame.transform.smoothscale(self.sprite, (20, 30))
              self.bulletcoords = [ [self.x + ship.gunpos[0], ship.randY + 75], [self.x + ship.gunpos[1], ship.randY + 75] ]
              self.nextfire = False
+             self.soundrep = 0
         self.screen = screen
     
     def fire(self, target, bulletspeed=-36): #displays bullet and updates its positions to be displayed next time
@@ -47,6 +48,9 @@ class BulletSet():
                     return False
         
         elif self.ship.shiptype == "Enemy":
+                while self.soundrep == 0:
+                    enemyfiresound()
+                    self.soundrep+=1
                 self.screen.blit(self.sprite, self.bulletcoords[0])
                 self.screen.blit(self.sprite, self.bulletcoords[1])
                 self.bulletcoords[0][1]+= bulletspeed
@@ -59,6 +63,7 @@ class BulletSet():
                     self.bulletcoords[1][1] = self.ship.randY + 75
                     self.bulletcoords[0][1] = self.ship.randY + 75
                     target.health-=1
+                    self.soundrep = 0
                     
                 
             

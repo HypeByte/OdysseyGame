@@ -11,7 +11,11 @@ from bulletsystem import BulletSet
 from bulletsystem import Bullets 
 import globaldata
 from globaldata import *
+from pygame import mixer
 
+playerfiresound = pygame.mixer.Sound("./asset/sound/playershoot.mp3")
+explosionsound = pygame.mixer.Sound("./asset/sound/explosion.flac")
+spawnsound = pygame.mixer.Sound("./asset/sound/spawnsound.wav")
 
 #Shield mechanic function used to spawn a shield around a sprite object
 def spawnShield(target, screen):
@@ -75,6 +79,7 @@ class Player(Element):
                 self.delta = 0
 
             if event_handler.key == pygame.K_UP or event_handler.key == pygame.K_w:
+                playerfiresound.play(maxtime=1000)
                 self.addbulletstate = False #If the up arrow is released make the add bullet state false
             
             
@@ -112,6 +117,7 @@ class Player(Element):
             else:
                 for target in self.target:
                     if bulletCollide(bullet, target) and target.state == "display":
+                        explosionsound.play()
                         self.score+=1
                         self.target.remove(target)
                         if self.score >= 0 and self.score <= 10:
@@ -153,12 +159,16 @@ class Enemy(Element):
         self.randY = random.choice(range(self.spawnspeed, 351, self.spawnspeed))
         self.gunpos = bullet_map[rand]
         self.enemybullet = BulletSet(self, self.screen)
+        self.soundrep = 0
 
      #Displays enemy on screen
      def spawn(self):
         if self.state == "spawn":
 
             if self.coords[1] < self.randY:
+                while self.soundrep == 0:
+                    spawnsound.play()
+                    self.soundrep+=1
                 self.coords[1]+= self.spawnspeed
                 self.screen.blit(self.sprite, (self.coords[0], self.coords[1]))
                 spawnShield(self, self.screen)

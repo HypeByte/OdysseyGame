@@ -4,6 +4,7 @@ import globaldata
 import sys
 import os
 
+
 def bulletCollide(projectile, target):
 
     if projectile.bulletcoords[0][0] > target.coords[0] and projectile.bulletcoords[0][0] < target.coords[0] + target.scale[0] or projectile.bulletcoords[1][0] > target.coords[0] and projectile.bulletcoords[1][0] < target.coords[0] + target.scale[0]: 
