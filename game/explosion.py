@@ -38,9 +38,9 @@ class Explosion:
         self.state = True
 
     #Updates to the next animation frame, animation frame swith to frame ratio: 1 : 2
-    def update(self):
-        if int(self.frame + .5) < len(self.animation) and self.state == True:
-            self.frame+=.5
+    def update(self, speed=.5):
+        if int(self.frame + speed) < len(self.animation) and self.state == True:
+            self.frame+=speed
             self.image = self.animation[int(self.frame)]
         
         else:

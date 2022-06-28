@@ -12,3 +12,5 @@ player_sprites = ["./asset/images/player1.png",
                   "./asset/images/player3.png",
                   "./asset/images/player4.png" ]
 
+Screen_size = (1000, 800)
+origin = (0, 0)
