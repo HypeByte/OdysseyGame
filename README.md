@@ -1,7 +1,10 @@
 # OdysseyGame
 Programmed with Python using Pygame API
 <h1>How to Install</h1>
-[![Installing Odyssey Space Defender](https://img.youtube.com/vi/KCxFUK-ZC0I&ab_channel=HypeByte/0.jpg)]
-(https://www.youtube.com/watch?v=KCxFUK-ZC0I&ab_channel=HypeByte)
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=KCxFUK-ZC0I">
+         <img src="https://www.youtube.com/watch?v=KCxFUK-ZC0I" style="width:100%;">
+      </a>
+</div>
 
 
